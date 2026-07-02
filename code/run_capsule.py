@@ -1,10 +1,12 @@
 """ top level run script """
 import json
 import logging
+import os
 from pathlib import Path
 
 from dynamic_foraging_processing.pipeline import Pipeline
 from dynamic_foraging_processing.raw_data_loader import RawDataLoader
+from log_schema import setup_logging
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
@@ -22,13 +24,14 @@ class InputSettings(BaseSettings, cli_parse_args=True):
         default=Path("/results/"), description="Output directory"
     )
 
-if __name__ == "__main__":
+def run() -> None:
+    """
+    Entrypoint for executing
+    """
     settings = InputSettings()
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
     )
-
-
     raw_data_path = tuple(settings.input_directory.glob("*"))
     if not raw_data_path:
         raise FileNotFoundError(
@@ -48,6 +51,20 @@ if __name__ == "__main__":
     with open(data_description_path, "r") as f:
         data_description = json.load(f)
 
+    acquisition_name = data_description["name"]
+    process_name = os.getenv("PROCESS_NAME", "dynamic-foraging-nwb-packaging")
+    pipeline_name = os.getenv("PIPELINE_NAME", "")
+    setup_logging(
+        (Path(__file__).parent / "cloud_watch_config.yml").as_posix(),
+        model={
+            "acquisition_name": acquisition_name,
+            "process_name": process_name,
+            "pipeline_name": pipeline_name    
+        },
+    )
+
+    logger.info("Begin processing...", extra={"event_type": "stage_start"})
+
     logger.info(
         f"Found session {data_description["name"]}. "
         "Running nwb packaging now and writing to disk"
@@ -58,3 +75,10 @@ if __name__ == "__main__":
     logger.info(
         "Finished nwb packaging and writing. Written to results"
     )
+    logger.info("Pipeline stage completed", extra={"event_type": "stage_complete"})
+
+if __name__ == "__main__":
+    try:
+        run()
+    except Exception as e:
+        logger.exception("Pipeline stage failed", extra={"event_type": "stage_error"})
