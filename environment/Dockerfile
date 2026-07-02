@@ -1,4 +1,4 @@
-# hash:sha256:3f8bc65f8e2ca570be54c54c14ccdd4566eea0e7d8ad54c26bbabac3f191ad0e
+# hash:sha256:841e1bf82d96d8896bb40fa09d459742bc02f39158f10af03b5c5ad736ef5f6d
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/mambaforge3:24.5.0-0-python3.12.4-ubuntu22.04
 
@@ -12,6 +12,10 @@ RUN apt-get update \
         libglib2.0-0=2.72.4-0ubuntu2.9 \
         libxcb1=1.14-3ubuntu3 \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip install -U --no-cache-dir \
+    log-schema==0.2.10.dev1 \
+    watchtower==3.4.0
 
 ADD "https://github.com/coder/code-server/releases/download/v4.100.3/code-server-4.100.3-linux-amd64.tar.gz" /.code-server/code-server.tar.gz
 
