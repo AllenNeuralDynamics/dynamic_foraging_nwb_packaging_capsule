@@ -1,8 +1,7 @@
 # Dynamic Foraging — NWB Packaging Capsule
 
-Packages a raw [dynamic foraging](https://github.com/AllenNeuralDynamics/dynamic-foraging-task)
+Packages a raw [dynamic foraging](https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging)
 acquisition into an NWB file. The capsule loads the raw acquisition through the
-[aind-behavior-dynamic-foraging](https://github.com/AllenNeuralDynamics/Aind.Behavior.DynamicForaging)
 data contract, assembles the NWB acquisition entries and the `trials` table, and
 writes the NWB (Zarr) store plus its `processing.json` metadata.
 
