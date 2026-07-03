@@ -73,6 +73,6 @@ pulls in `aind-nwb-utils`, `pynwb`, `aind-data-schema` and `hdmf-zarr` on top of
 `aind-behavior-dynamic-foraging` data contract:
 
 ```bash
-pip install "dynamic-foraging-processing[nwb] @ git+https://github.com/AllenNeuralDynamics/dynamic-foraging-processing.git"
+pip install "dynamic-foraging-processing[full] @ git+https://github.com/AllenNeuralDynamics/dynamic-foraging-processing.git"
 ```
 
