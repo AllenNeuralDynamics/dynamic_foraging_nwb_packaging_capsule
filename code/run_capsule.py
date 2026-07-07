@@ -10,11 +10,10 @@ from log_schema import setup_logging
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
-logger = logging.getLogger(__name__)
 
 class InputSettings(BaseSettings, cli_parse_args=True):
     """
-    Settings for VR Foraging Primary Data NWB Packaging
+    Settings for NWB Packaging
     """
 
     input_directory: Path = Field(
@@ -29,9 +28,6 @@ def run() -> None:
     Entrypoint for executing
     """
     settings = InputSettings()
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-    )
     raw_data_path = tuple(settings.input_directory.glob("*"))
     if not raw_data_path:
         raise FileNotFoundError(
@@ -63,22 +59,22 @@ def run() -> None:
         },
     )
 
-    logger.info("Begin processing...", extra={"event_type": "stage_start"})
+    logging.info("Begin processing...", extra={"event_type": "stage_start"})
 
-    logger.info(
+    logging.info(
         f"Found session {data_description["name"]}. "
         "Running nwb packaging now and writing to disk"
     )
     raw_data_loader = RawDataLoader(raw_data_path)
     pipeline_runner = Pipeline(raw_data_loader)
     pipeline_runner.run_nwb(settings.output_directory)
-    logger.info(
+    logging.info(
         "Finished nwb packaging and writing. Written to results"
     )
-    logger.info("Pipeline stage completed", extra={"event_type": "stage_complete"})
+    logging.info("Pipeline stage completed", extra={"event_type": "stage_complete"})
 
 if __name__ == "__main__":
     try:
         run()
     except Exception as e:
-        logger.exception("Pipeline stage failed", extra={"event_type": "stage_error"})
+        logging.exception("Pipeline stage failed", extra={"event_type": "stage_error"})
