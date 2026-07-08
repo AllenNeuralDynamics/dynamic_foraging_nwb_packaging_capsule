@@ -8,6 +8,8 @@ writes the NWB (Zarr) store plus its `processing.json` metadata.
 > **Note:** Data must be acquired in the `aind-behavior-dynamic-foraging` data
 > contract format to be compatible with this capsule.
 
+Uses this [library](https://github.com/AllenNeuralDynamics/dynamic-foraging-processing) to package the data
+
 ## Input
 A single raw acquisition directory mounted under `/data`. It must contain the
 data-contract streams (Harp device registers, software events, camera data) and
