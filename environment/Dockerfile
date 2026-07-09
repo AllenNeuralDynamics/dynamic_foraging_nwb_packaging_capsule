@@ -1,4 +1,4 @@
-# hash:sha256:841e1bf82d96d8896bb40fa09d459742bc02f39158f10af03b5c5ad736ef5f6d
+# hash:sha256:d7699bad76021aa9e6c19b36e6a143380a14b70997cab92ebd9efb564cf89887
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/mambaforge3:24.5.0-0-python3.12.4-ubuntu22.04
 
@@ -24,11 +24,6 @@ RUN cd /.code-server \
     && rm code-server.tar.gz \
     && ln -s /.code-server/code-server-4.100.3-linux-amd64/bin/code-server /usr/bin/code-server \
     && mkdir -p /.vscode/extensions
-
-RUN code-server --extensions-dir="/.vscode/extensions" --install-extension ms-python.python@2025.14.0 \
-    && code-server --extensions-dir="/.vscode/extensions" --install-extension ms-toolsai.jupyter@2025.4.1 \
-    && code-server --extensions-dir="/.vscode/extensions" --install-extension reditorsupport.r@2.8.6 \
-    && code-server --extensions-dir="/.vscode/extensions" --install-extension saoudrizwan.claude-dev@3.35.1
 
 COPY postInstall /
 RUN --mount=type=secret,id=secrets . /run/secrets/secrets \
