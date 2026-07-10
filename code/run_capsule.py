@@ -34,10 +34,13 @@ def run() -> None:
             "No data asset attached"
         )
     
+    ### Check to make sure single raw asset is attached
     if len(raw_data_path) > 1:
         raise ValueError(
             "Multiple data assets attached"
         )
+    
+    ### Look for data description
     raw_data_path = raw_data_path[0]
     data_description_path = raw_data_path / "data_description.json"
     if not data_description_path.exists():
@@ -47,6 +50,7 @@ def run() -> None:
     with open(data_description_path, "r") as f:
         data_description = json.load(f)
 
+    ### logging setup
     acquisition_name = data_description["name"]
     process_name = os.getenv("PROCESS_NAME", "dynamic-foraging-nwb-packaging")
     pipeline_name = os.getenv("PIPELINE_NAME", "")
@@ -65,6 +69,8 @@ def run() -> None:
         f"Found session {data_description["name"]}. "
         "Running nwb packaging now and writing to disk"
     )
+
+    ### Run nwb packaging
     raw_data_loader = RawDataLoader(raw_data_path)
     pipeline_runner = Pipeline(raw_data_loader)
     pipeline_runner.run_nwb(settings.output_directory)
