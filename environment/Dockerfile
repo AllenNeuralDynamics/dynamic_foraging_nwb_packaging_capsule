@@ -1,4 +1,4 @@
-# hash:sha256:d7699bad76021aa9e6c19b36e6a143380a14b70997cab92ebd9efb564cf89887
+# hash:sha256:aa858d824a09c5049b359d085eb8d5771218fdbadfd21e198e5a40c0581ff664
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/mambaforge3:24.5.0-0-python3.12.4-ubuntu22.04
 
@@ -9,7 +9,7 @@ COPY git-ask-pass /
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libgl1=1.4.0-1 \
-        libglib2.0-0=2.72.4-0ubuntu2.9 \
+        libglib2.0-0=2.72.4-0ubuntu2.10 \
         libxcb1=1.14-3ubuntu3 \
     && rm -rf /var/lib/apt/lists/*
 
